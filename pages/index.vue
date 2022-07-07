@@ -1,20 +1,18 @@
 <template>
-<div class="container">
+<div class="container" >
     <h1 v-if="currentForm <= 5">{{ currentForm }} / 5</h1>
-    <div id="first-form" v-if="currentForm < 6">
+    <form id="first-form" v-if="currentForm < 6">
         <div class="first-col">
-            <p>question</p>
-            <template for="A">
-                <input type="radio" id="A" value="A" name="pg1">
-                <label>Choice A</label>
-            </template>
-            <input type="radio" id="B" value="B" name="pg1">
-            <label for="B">Choice B</label>
-            <input type="radio" id="C" value="C" name="pg1">
-            <label for="C">Choice C</label>
+            <div v-for="question, id in questions" id="for-block" v-show="id == currentForm">
+                <p id="question">{{question.name}}</p>
+                <template id="possible-answers" v-for="answer, key in question.answers">
+                    <input id="checkbox" type="radio" :id="key" :value="key" name="pg1">
+                    <label id="answer">{{answer}}</label>
+                </template>
+            </div>
         </div>
-        <button type="submit" class="submit" @click="getInput">submit</button>
-    </div>
+        <button type="button" class="submit" id="submit" @click="getInput">submit</button>
+    </form>
     <div class="screen" v-if="currentForm > 5">
         <h1>Most pressed answer</h1>
         <p id="mostPressed">{{ num }}</p>
@@ -23,46 +21,100 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return{
-            num: '',
             checkedValues: [],
             currentForm: 1,
+            checked: false,
             a: 0,
             b: 0,
             c: 0,
             questions: {
-                1: {'test1' : {answers: ['choice a1','choice b1','choice c1']}},
-                2: {'test2' : {answers: ['choice a2','choice b2','choice c2']}},
-                3: {'test3' : {answers: ['choice a3','choice b3','choice c3']}},
-                4: {'test4' : {answers: ['choice a4','choice b4','choice c4']}},
-                5: {'test5' : {answers: ['choice a5','choice b5','choice c5']}}
+                '1': {
+                    name: 'test1',
+                    answers: {
+                        'A':'choice a1',
+                        'B': 'choice b1',
+                        'C': 'choice c1'
+                    }
+                },
+                '2': {
+                    'name': 'test2',
+                    answers: {
+                        'A':'choice a2',
+                        'B': 'choice b2',
+                        'C': 'choice c2'
+                    }
+                },
+                '3': {
+                    'name': 'test3',
+                    answers: {
+                        'A':'choice a3',
+                        'B': 'choice b3',
+                        'C': 'choice c3'
+                    }
+                },
+                '4': {
+                    'name': 'test4',
+                    answers: {
+                        'A':'choice a4',
+                        'B': 'choice b4',
+                        'C': 'choice c4'
+                    }
+                },
+                '5': {
+                    'name': 'test5',
+                    answers: {
+                        'A':'choice a5',
+                        'B': 'choice b5',
+                        'C': 'choice c5'
+                    }
+                }
             },
         }
     },
     methods: {
+        //  metode
         getInput: function() {
+            //deklarē mainīgos(numbers priekš daudzuma cik tickoti)
             let numbers = {a : this.a, b : this.b, c : this.c}
+            //klausās inputus kuri ir atzīmēti
             let tickedRadio = document.querySelectorAll('input[type="radio"]:checked');
+            console.log(tickedRadio)
+            //seto checked uz false, lai tas nepaliek true
+            this.checked = false
+            // ja nav neviens chekots, tad tas iziet no funkcijas
+            if (tickedRadio.length <= 0) return false;
+            // for loops prieks atbilzu skaitisanas
             for (let i = 0; i <= (toString(tickedRadio).length * 0); i++){
                 this.checkedValues.push(tickedRadio[i].value)
                 tickedRadio[i].checked = false
                 if (tickedRadio[i].value == "A"){
                     this.a++
+                    this.checked = true
                 } else if (tickedRadio[i].value == "B"){
                     this.b++
-                } else {
+                    this.checked = true
+                } else if (tickedRadio[i].value == "C"){
                     this.c++
+                    this.checked = true
                 }
             }
+            // ja checked ir true, tad palaizts nakosais jautajums
+            if (this.checked){
+                this.currentForm += 1
+            }
             console.log(this.checkedValues)
-            this.currentForm += 1
             console.log(this.a, this.b, this.c)
+            // kalkule lielako skaitu atbilzu burtu
             if (this.currentForm == 6){
                 this.num = Object.keys(numbers).reduce((a, b) => numbers[a] > numbers[b] ? a : b)
             }
         }
+    },
+    mounted(){
     }
 }
 </script>
@@ -96,6 +148,8 @@ export default {
         font-size: 50px;
     }
     button{
+        position: relative;
+        top: 20vh;
         width: 200px;
         height: 50px;
         color: white;
@@ -112,6 +166,6 @@ export default {
         font-size: 30px;
     }
     p {
-        font-size: 20px;
+        font-size: 40px;
     }
 </style>
