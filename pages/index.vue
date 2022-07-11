@@ -1,13 +1,18 @@
 <template>
 <div class="container" >
-    <h1 v-if="currentForm <= 5">{{ currentForm }} / 5</h1>
-    <form id="first-form" v-if="currentForm < 6">
+    <div class="starting-screen" v-if="currentForm == 0">
+        <h1>Epic form</h1>
+        <button id="startButton" class="startButton" @click="startForm">start here</button>
+    </div>
+    <h1 v-if="currentForm <= 5 && currentForm > 0">{{ currentForm }} / 5</h1>
+    <form id="first-form" v-if="currentForm < 6 && currentForm > 0">
         <div class="first-col">
             <div v-for="question, id in questions" id="for-block" v-show="id == currentForm">
                 <p id="question">{{question.name}}</p>
                 <template id="possible-answers" v-for="answer, key in question.answers">
-                    <input id="checkbox" type="radio" :id="key" :value="key" name="pg1">
+                    <input ref="radiod" type="radio" :value="key" v-model="pickedA">
                     <label id="answer">{{answer}}</label>
+                    <a>{{pickedA}}</a>
                 </template>
             </div>
         </div>
@@ -26,8 +31,9 @@ export default {
     data() {
         return{
             checkedValues: [],
-            currentForm: 1,
+            currentForm: 0,
             checked: false,
+            pickedA: '',
             a: 0,
             b: 0,
             c: 0,
@@ -81,23 +87,22 @@ export default {
             //deklarē mainīgos(numbers priekš daudzuma cik tickoti)
             let numbers = {a : this.a, b : this.b, c : this.c}
             //klausās inputus kuri ir atzīmēti
-            let tickedRadio = document.querySelectorAll('input[type="radio"]:checked');
-            console.log(tickedRadio)
+            console.log(this.pickedA)
             //seto checked uz false, lai tas nepaliek true
             this.checked = false
             // ja nav neviens chekots, tad tas iziet no funkcijas
-            if (tickedRadio.length <= 0) return false;
+            if (this.pickedA == "") return false;
             // for loops prieks atbilzu skaitisanas
-            for (let i = 0; i <= (toString(tickedRadio).length * 0); i++){
-                this.checkedValues.push(tickedRadio[i].value)
-                tickedRadio[i].checked = false
-                if (tickedRadio[i].value == "A"){
+            for (let i = 0; i <= (toString(this.$refs.radiod.pickedA).length * 0); i++){
+                this.checkedValues.push(this.$refs.radiod.pickedA)
+                this.pickedA == ""
+                if (this.pickedA == "A"){
                     this.a++
                     this.checked = true
-                } else if (tickedRadio[i].value == "B"){
+                } else if (this.pickedA == "B"){
                     this.b++
                     this.checked = true
-                } else if (tickedRadio[i].value == "C"){
+                } else if (this.pickedA == "C"){
                     this.c++
                     this.checked = true
                 }
@@ -112,6 +117,10 @@ export default {
             if (this.currentForm == 6){
                 this.num = Object.keys(numbers).reduce((a, b) => numbers[a] > numbers[b] ? a : b)
             }
+            this.pickedA = "";
+        },
+        startForm: function(){
+            this.currentForm++
         }
     },
     mounted(){
