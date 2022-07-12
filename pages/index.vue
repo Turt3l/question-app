@@ -18,7 +18,7 @@
         <button type="button" class="submit btn btn-outline-danger" id="submit" @click="getInput">Submit</button>
     </form>
     <div class="screen" v-if="currentForm > 5">
-        <h1>Most pressed answer</h1>
+        <h1>Most pressed answer </h1>
         <p id="mostPressed" style="font-size: 20px;"><b>{{ num.toUpperCase() }}</b></p>
     </div>
 </div>
