@@ -93,19 +93,17 @@ export default {
             // ja nav neviens chekots, tad tas iziet no funkcijas
             if (this.pickedA == "") return false;
             // for loops prieks atbilzu skaitisanas
-            for (let i = 0; i <= (toString(this.$refs.radiod.pickedA).length * 0); i++){
-                this.checkedValues.push(this.$refs.radiod.pickedA)
-                this.pickedA == ""
-                if (this.pickedA == "A"){
-                    this.a++
-                    this.checked = true
-                } else if (this.pickedA == "B"){
-                    this.b++
-                    this.checked = true
-                } else if (this.pickedA == "C"){
-                    this.c++
-                    this.checked = true
-                }
+            this.checkedValues.push(this.$refs.radiod.pickedA)
+            this.pickedA == ""
+            if (this.pickedA == "A"){
+                this.a++
+                this.checked = true
+            } else if (this.pickedA == "B"){
+                this.b++
+                this.checked = true
+            } else if (this.pickedA == "C"){
+                this.c++
+                this.checked = true
             }
             // ja checked ir true, tad palaizts nakosais jautajums
             if (this.checked){
